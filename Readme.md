@@ -25,3 +25,19 @@ It will then return to the original coin, ultimately holding more of it than it 
 
 The bot jumps between a configured set of coins on the condition that it does not return to a coin unless it is profitable in respect to the amount held last.
 This means that we will never end up having less of a certain coin. The risk is that one of the coins may freefall relative to the others all of a sudden, attracting our reverse greedy algorithm.
+
+## Preparing the `BINANCE` application
+ -  Create a [Binance account](https://accounts.binance.com/en/register?ref=186219461)
+ -  Enable Two-factor Authentication. (This can be done in the settings after authorization)
+ -  Create a [new API key](https://github.com/paveldat/dobby-binance#how-to-create-new-api-key)
+ -  Buy the cryptocurrencies that you want to use as bridge currency. (Note that in the Binance crypto exchange, the minimum transaction price is $10)
+
+## How to create new API key
+-   Click (hover) on the profile window
+-   Click on `API Manager`
+-   Select `Create API`
+-   Follow the instructions of Binance
+
+<p align="center">
+  <img src = "https://github.com/paveldat/dobby-binance/blob/main/img/account.png">
+</p>
