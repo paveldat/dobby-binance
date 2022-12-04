@@ -1,7 +1,9 @@
 # Dobby - Binance Trade Bot
 
+
 ## Introduction
 According to our observations and monitoring of the crypto market for a long time, we have revealed that all coins follow Bitcoin's lead; the difference is their phase offset.
+
 
 ## What is the `BRIDGE CURRENCY`?
 Unfortunately, the Binance crypto exchange does not have all crypto assets, so Binance does not have markets for every pair of altcoins.
@@ -26,11 +28,13 @@ It will then return to the original coin, ultimately holding more of it than it 
 The bot jumps between a configured set of coins on the condition that it does not return to a coin unless it is profitable in respect to the amount held last.
 This means that we will never end up having less of a certain coin. The risk is that one of the coins may freefall relative to the others all of a sudden, attracting our reverse greedy algorithm.
 
+
 ## Preparing the `BINANCE` application
  -  Create a [Binance account](https://accounts.binance.com/en/register?ref=186219461)
  -  Enable Two-factor Authentication. (This can be done in the settings after authorization)
  -  Create a [new API key](https://github.com/paveldat/dobby-binance#how-to-create-new-api-key)
  -  Buy the cryptocurrencies that you want to use as bridge currency. (Note that in the Binance crypto exchange, the minimum transaction price is $10)
+
 
 ## How to create new API key
 -   Click (hover) on the profile window
@@ -42,13 +46,13 @@ This means that we will never end up having less of a certain coin. The risk is 
   <img src = "https://github.com/paveldat/dobby-binance/blob/main/img/account.png">
 </p>
 
+
 ## Tool setup
 
 ### Install Python dependencies
 Run the following line in the terminal: `pip install -r requirements.txt`.
 
 ### User configuration (`user.cfg`)
-
 **The configuration file consists of the following fields:**
 
 -   **api_key** - Binance API key generated in the [How to create new API key](https://github.com/paveldat/dobby-binance#how-to-create-new-api-key) stage.
@@ -65,16 +69,17 @@ Run the following line in the terminal: `pip install -r requirements.txt`.
 -   **buy_timeout/sell_timeout** - Controls how many minutes to wait before cancelling a limit order (buy/sell) and returning to "scout" mode. 0 means that the order will never be cancelled prematurely.
 -   **scout_sleep_time** - Controls how many seconds bot should wait between analysis of current prices. Since the bot now operates on websockets this value should be set to something low (like 1), the reasons to set it above 1 are when you observe high CPU usage by bot or you got api errors about requests weight limit.
 
+### Supported coin list
+To set coins for trading use the supported_coin_list file.
+
 #### Environment Variables
-
 All of the options provided in `user.cfg` can also be configured using environment variables.
-
 ```
 CURRENT_COIN_SYMBOL:
 SUPPORTED_COIN_LIST: "XLM TRX ICX EOS IOTA ONT QTUM ETC ADA XMR DASH NEO ATOM DOGE VET BAT OMG BTT"
 BRIDGE_SYMBOL: USDT
-API_KEY: vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8A
-API_SECRET_KEY: NhqPtmdSJYdKjVHjA7PZj4Mge3R5YNiP1e3UZjInClVN65XAbvqqM6A7H5fATj0j
+API_KEY: <Your API key>
+API_SECRET_KEY: <Your API Secret key>
 SCOUT_MULTIPLIER: 5
 SCOUT_SLEEP_TIME: 1
 TLD: com
@@ -93,7 +98,6 @@ You can [use BNB to pay for any fees on the Binance platform](https://support.bi
 -   Take into consideration the discount when calculating the trade threshold.
 
 ### Notifications with Apprise
-
 Apprise allows the bot to send notifications to all of the most popular notification services available such as: Telegram, Discord, Slack, Amazon SNS, Gotify, etc.
 
 To set this up you need to create a apprise.yml file in the config directory.
@@ -103,14 +107,13 @@ There is an example version of this file to get you started.
 If you are interested in running a Telegram bot, more information can be found at [Telegram's official documentation](https://core.telegram.org/bots).
 
 ## Run
-
 ```shell
 python -m binance_trade_bot
 ```
 
 ## Responsibility
-
-This project is for informational purposes only. You should not construe any such information or other material as legal, tax, investment, financial, or other advice. Nothing contained here constitutes a solicitation, recommendation, endorsement, or offer by me or any third party service provider to buy or sell any securities or other financial instruments in this or in any other jurisdiction in which such solicitation or offer would be unlawful under the securities laws of such jurisdiction.
+This project is for informational purposes only. You should not construe any such information or other material as legal, tax, investment, financial, or other advice.
+Nothing contained here constitutes a solicitation, recommendation, endorsement, or offer by me or any third party service provider to buy or sell any securities or other financial instruments in this or in any other jurisdiction in which such solicitation or offer would be unlawful under the securities laws of such jurisdiction.
 
 If you plan to use real money, USE AT YOUR OWN RISK.
 
