@@ -15,17 +15,17 @@ The default bridge currency is Tether (USDT), which is stable by design and comp
 Instead of Tether (USDT), the user can set his coin as a bridge currency.
 
 <p align="center">
-  Coin A → <BRIDGE CURRENCY COIN> → Coin B
+  Coin A → BRIDGE CURRENCY COIN → Coin B
 </p>
 
 The way the bot takes advantage of the observed behaviour is to always downgrade from the "strong" coin to the "weak" coin, under the assumption that at some point the tables will turn.
 It will then return to the original coin, ultimately holding more of it than it did originally. This is done while taking into consideration the trading fees.
 
 <div align="center">
-  <p><b>Coin A</b> → <BRIDGE CURRENCY COIN> → Coin B</p>
-  <p>Coin B → <BRIDGE CURRENCY COIN> → Coin C</p>
+  <p><b>Coin A</b> → BRIDGE CURRENCY COIN → Coin B</p>
+  <p>Coin B → BRIDGE CURRENCY COIN → Coin C</p>
   <p>...</p>
-  <p>Coin Z → <BRIDGE CURRENCY COIN> → <b>Coin A</b></p>
+  <p>Coin Z → BRIDGE CURRENCY COIN → <b>Coin A</b></p>
 </div>
 
 The bot jumps between a configured set of coins on the condition that it does not return to a coin unless it is profitable in respect to the amount held last.
