@@ -1,5 +1,8 @@
 # Dobby - Binance Trade Bot
 
+<p align="center">
+  <img src = "https://github.com/paveldat/dobby-binance/blob/main/img/logo.png">
+</p>
 
 ## Introduction
 According to our observations and monitoring of the crypto market for a long time, we have revealed that all coins follow Bitcoin's lead; the difference is their phase offset.
