@@ -117,8 +117,8 @@ python -m binance_trade_bot
 ## Database Viewer (for Windows only)
 A separate program was written that can display the contents of the database created by the bot in the interface.
 How it works:
-* Copy the file `crypto_trading.db` from the `data` directory located in the root directory of the repository to the `Datbase_viewer` folder
-* Now let's go to the `Datbase_viewer` folder
+* Copy the file `crypto_trading.db` from the `data` directory located in the root directory of the repository to the `datbase_viewer` folder
+* Now let's go to the `datbase_viewer` folder
 * Launch `Dobby.exe`
 
 Database Viewer example:
