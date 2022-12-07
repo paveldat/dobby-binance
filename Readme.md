@@ -119,7 +119,7 @@ A separate program was written that can display the contents of the database cre
 How it works:
 * Copy the file `crypto_trading.db` from the `data` directory located in the root directory of the repository to the `Datbase_viewer` folder
 * Now let's go to the `Datbase_viewer` folder
-* Launching `Dobby.exe`
+* Launch `Dobby.exe`
 
 Database Viewer example:
 <p align="center">
