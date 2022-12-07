@@ -114,6 +114,18 @@ If you are interested in running a Telegram bot, more information can be found a
 python -m binance_trade_bot
 ```
 
+## Database Viewer (for Windows only)
+A separate program was written that can display the contents of the database created by the bot in the interface.
+How it works:
+* Copy the file `crypto_trading.db` from the `data` directory located in the root directory of the repository to the `Datbase_viewer` folder
+* Now let's go to the `Datbase_viewer` folder
+* Launching `Dobby.exe`
+
+Database Viewer example:
+<p align="center">
+  <img src = "https://github.com/paveldat/dobby-binance/blob/main/img/database_viewer.png">
+</p>
+
 ## Responsibility
 This project is for informational purposes only. You should not construe any such information or other material as legal, tax, investment, financial, or other advice.
 Nothing contained here constitutes a solicitation, recommendation, endorsement, or offer by me or any third party service provider to buy or sell any securities or other financial instruments in this or in any other jurisdiction in which such solicitation or offer would be unlawful under the securities laws of such jurisdiction.
