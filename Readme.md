@@ -111,7 +111,7 @@ If you are interested in running a Telegram bot, more information can be found a
 
 ## Run
 ```shell
-python -m binance_trade_bot
+python -m dobby_trade_bot
 ```
 
 ## Database Viewer (for Windows only)

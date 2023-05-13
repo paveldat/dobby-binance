@@ -5,7 +5,7 @@ import os
 from .models import Coin
 
 CFG_FL_NAME = "user.cfg"
-USER_CFG_SECTION = "BOT"
+USER_CFG_SECTION = "dobby-binance"
 
 
 class Config:  # pylint: disable=too-few-public-methods,too-many-instance-attributes

@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from binance_trade_bot.auto_trader import AutoTrader
+from dobby_trade_bot.auto_trader import AutoTrader
 
 
 class Strategy(AutoTrader):

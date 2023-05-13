@@ -11,7 +11,13 @@ from .models import Coin, CoinValue, Pair
 
 
 class AutoTrader:
-    def __init__(self, binance_manager: BinanceAPIManager, database: Database, logger: Logger, config: Config):
+    def __init__(
+        self,
+        binance_manager: BinanceAPIManager,
+        database: Database,
+        logger: Logger,
+        config: Config,
+    ):
         self.manager = binance_manager
         self.db = database
         self.logger = logger
@@ -54,7 +60,7 @@ class AutoTrader:
         """
 
         if coin_price is None:
-            self.logger.info("Skipping update... current coin {} not found".format(coin + self.config.BRIDGE))
+            self.logger.info(f"Skipping update... current coin {coin + self.config.BRIDGE} not found")
             return
 
         session: Session
@@ -63,9 +69,7 @@ class AutoTrader:
                 from_coin_price = self.manager.get_ticker_price(pair.from_coin + self.config.BRIDGE)
 
                 if from_coin_price is None:
-                    self.logger.info(
-                        "Skipping update for coin {} not found".format(pair.from_coin + self.config.BRIDGE)
-                    )
+                    self.logger.info(f"Skipping update for coin {pair.from_coin + self.config.BRIDGE} not found")
                     continue
 
                 pair.ratio = from_coin_price / coin_price
@@ -83,16 +87,12 @@ class AutoTrader:
 
                 from_coin_price = self.manager.get_ticker_price(pair.from_coin + self.config.BRIDGE)
                 if from_coin_price is None:
-                    self.logger.info(
-                        "Skipping initializing {}, symbol not found".format(pair.from_coin + self.config.BRIDGE)
-                    )
+                    self.logger.info(f"Skipping initializing {pair.from_coin + self.config.BRIDGE}, symbol not found")
                     continue
 
                 to_coin_price = self.manager.get_ticker_price(pair.to_coin + self.config.BRIDGE)
                 if to_coin_price is None:
-                    self.logger.info(
-                        "Skipping initializing {}, symbol not found".format(pair.to_coin + self.config.BRIDGE)
-                    )
+                    self.logger.info(f"Skipping initializing {pair.to_coin + self.config.BRIDGE}, symbol not found")
                     continue
 
                 pair.ratio = from_coin_price / to_coin_price
@@ -113,9 +113,7 @@ class AutoTrader:
             optional_coin_price = self.manager.get_ticker_price(pair.to_coin + self.config.BRIDGE)
 
             if optional_coin_price is None:
-                self.logger.info(
-                    "Skipping scouting... optional coin {} not found".format(pair.to_coin + self.config.BRIDGE)
-                )
+                self.logger.info(f"Skipping scouting... optional coin {pair.to_coin + self.config.BRIDGE} not found")
                 continue
 
             self.db.log_scout(pair, pair.ratio, coin_price, optional_coin_price)
