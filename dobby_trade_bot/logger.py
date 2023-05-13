@@ -1,4 +1,5 @@
 import logging.handlers
+from pathlib import Path
 
 from .notifications import NotificationHandler
 
@@ -14,6 +15,7 @@ class Logger:
         self.Logger.propagate = False
         formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
         # default is "logs/crypto_trading.log"
+        Path('logs').mkdir(exist_ok=True, parents=True)
         fh = logging.FileHandler(f"logs/{logging_service}.log")
         fh.setLevel(logging.DEBUG)
         fh.setFormatter(formatter)
