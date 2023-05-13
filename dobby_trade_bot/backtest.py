@@ -86,7 +86,11 @@ class MockBinanceManager(BinanceAPIManager):
             f"{self.balances[target_symbol]}"
         )
 
-        event = defaultdict(lambda: None, order_price=from_coin_price, cumulative_quote_asset_transacted_quantity=0)
+        event = defaultdict(
+            lambda: None,
+            order_price=from_coin_price,
+            cumulative_quote_asset_transacted_quantity=0,
+        )
 
         return BinanceOrder(event)
 
@@ -132,7 +136,13 @@ class MockDatabase(Database):
     def __init__(self, logger: Logger, config: Config):
         super().__init__(logger, config, "sqlite:///")
 
-    def log_scout(self, pair: Pair, target_ratio: float, current_coin_price: float, other_coin_price: float):
+    def log_scout(
+        self,
+        pair: Pair,
+        target_ratio: float,
+        current_coin_price: float,
+        other_coin_price: float,
+    ):
         pass
 
 

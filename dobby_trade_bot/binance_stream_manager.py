@@ -66,17 +66,31 @@ class OrderGuard:
 
 
 class BinanceStreamManager:
-    def __init__(self, cache: BinanceCache, config: Config, binance_client: binance.client.Client, logger: Logger):
+    def __init__(
+        self,
+        cache: BinanceCache,
+        config: Config,
+        binance_client: binance.client.Client,
+        logger: Logger,
+    ):
         self.cache = cache
         self.logger = logger
         self.bw_api_manager = BinanceWebSocketApiManager(
-            output_default="UnicornFy", enable_stream_signal_buffer=True, exchange=f"binance.{config.BINANCE_TLD}"
+            output_default="UnicornFy",
+            enable_stream_signal_buffer=True,
+            exchange=f"binance.{config.BINANCE_TLD}",
         )
         self.bw_api_manager.create_stream(
-            ["arr"], ["!miniTicker"], api_key=config.BINANCE_API_KEY, api_secret=config.BINANCE_API_SECRET_KEY
+            ["arr"],
+            ["!miniTicker"],
+            api_key=config.BINANCE_API_KEY,
+            api_secret=config.BINANCE_API_SECRET_KEY,
         )
         self.bw_api_manager.create_stream(
-            ["arr"], ["!userData"], api_key=config.BINANCE_API_KEY, api_secret=config.BINANCE_API_SECRET_KEY
+            ["arr"],
+            ["!userData"],
+            api_key=config.BINANCE_API_KEY,
+            api_secret=config.BINANCE_API_SECRET_KEY,
         )
         self.binance_client = binance_client
         self.pending_orders: Set[Tuple[str, int]] = set()
@@ -91,7 +105,7 @@ class BinanceStreamManager:
         pending_orders: Set[Tuple[str, int]]
         with self.pending_orders_mutex:
             pending_orders = self.pending_orders.copy()
-        for (symbol, order_id) in pending_orders:
+        for symbol, order_id in pending_orders:
             order = None
             while True:
                 try:
@@ -111,7 +125,10 @@ class BinanceStreamManager:
                 "order_price": float(order["price"]),
                 "transaction_time": order["time"],
             }
-            self.logger.info(f"Pending order {order_id} for symbol {symbol} fetched:\n{fake_report}", False)
+            self.logger.info(
+                f"Pending order {order_id} for symbol {symbol} fetched:\n{fake_report}",
+                False,
+            )
             self.cache.orders[fake_report["order_id"]] = BinanceOrder(fake_report)
 
     def _invalidate_balances(self):
@@ -152,7 +169,10 @@ class BinanceStreamManager:
                 asset = stream_data["asset"]
                 if asset in balances:
                     del balances[stream_data["asset"]]
-        elif event_type in ("outboundAccountPosition", "outboundAccountInfo"):  # !userData
+        elif event_type in (
+            "outboundAccountPosition",
+            "outboundAccountInfo",
+        ):  # !userData
             self.logger.debug(f"{event_type}: {stream_data}")
             with self.cache.open_balances() as balances:
                 for bal in stream_data["balances"]:

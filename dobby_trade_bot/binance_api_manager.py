@@ -119,16 +119,14 @@ class BinanceAPIManager:
             return balance
 
     def retry(self, func, *args, **kwargs):
-        time.sleep(1)
-        attempts = 0
-        while attempts < 20:
+        for attempt in range(20):
             try:
                 return func(*args, **kwargs)
             except Exception:  # pylint: disable=broad-except
-                self.logger.warning(f"Failed to Buy/Sell. Trying Again (attempt {attempts}/20)")
-                if attempts == 0:
+                self.logger.warning(f"Failed to Buy/Sell. Trying Again (attempt {attempt}/20)")
+                if attempt == 0:
                     self.logger.warning(traceback.format_exc())
-                attempts += 1
+                time.sleep(1)
         return None
 
     def get_symbol_filter(self, origin_symbol: str, target_symbol: str, filter_type: str):
@@ -147,7 +145,7 @@ class BinanceAPIManager:
 
     @cached(cache=TTLCache(maxsize=2000, ttl=43200))
     def get_min_notional(self, origin_symbol: str, target_symbol: str):
-        return float(self.get_symbol_filter(origin_symbol, target_symbol, "MIN_NOTIONAL")["minNotional"])
+        return float(self.get_symbol_filter(origin_symbol, target_symbol, "NOTIONAL")["minNotional"])
 
     def _wait_for_order(
         self, order_id, origin_symbol: str, target_symbol: str
@@ -183,7 +181,8 @@ class BinanceAPIManager:
                         partially_order = None
                         while partially_order is None:
                             partially_order = self.binance_client.order_market_sell(
-                                symbol=origin_symbol + target_symbol, quantity=order_quantity
+                                symbol=origin_symbol + target_symbol,
+                                quantity=order_quantity,
                             )
 
                     self.logger.info("Going back to scouting mode...")
@@ -237,15 +236,19 @@ class BinanceAPIManager:
         return self.retry(self._buy_alt, origin_coin, target_coin)
 
     def _buy_quantity(
-        self, origin_symbol: str, target_symbol: str, target_balance: float = None, from_coin_price: float = None
+        self,
+        origin_symbol: str,
+        target_symbol: str,
+        target_balance: float = None,
+        from_coin_price: float = None,
     ):
         target_balance = target_balance or self.get_currency_balance(target_symbol)
         from_coin_price = from_coin_price or self.get_ticker_price(origin_symbol + target_symbol)
 
         origin_tick = self.get_alt_tick(origin_symbol, target_symbol)
-        return math.floor(target_balance * 10 ** origin_tick / from_coin_price) / float(10 ** origin_tick)
+        return math.floor(target_balance * 10**origin_tick / from_coin_price) / float(10**origin_tick)
 
-    def _buy_alt(self, origin_coin: Coin, target_coin: Coin):
+    def _buy_alt(self, origin_coin: Coin, target_coin: Coin):  # pylint: disable=too-many-locals
         """
         Buy altcoin
         """
@@ -258,10 +261,14 @@ class BinanceAPIManager:
 
         origin_balance = self.get_currency_balance(origin_symbol)
         target_balance = self.get_currency_balance(target_symbol)
+        pair_info = self.binance_client.get_symbol_info(origin_symbol + target_symbol)
         from_coin_price = self.get_ticker_price(origin_symbol + target_symbol)
+        from_coin_price_s = "{:0.0{}f}".format(from_coin_price, pair_info["quotePrecision"])
 
         order_quantity = self._buy_quantity(origin_symbol, target_symbol, target_balance, from_coin_price)
-        self.logger.info(f"BUY QTY {order_quantity} of <{origin_symbol}>")
+        order_quantity_s = "{:0.0{}f}".format(order_quantity, pair_info["baseAssetPrecision"])
+
+        self.logger.info(f"BUY QTY {order_quantity}")
 
         # Try to buy until successful
         order = None
@@ -270,8 +277,8 @@ class BinanceAPIManager:
             try:
                 order = self.binance_client.order_limit_buy(
                     symbol=origin_symbol + target_symbol,
-                    quantity=order_quantity,
-                    price=from_coin_price,
+                    quantity=order_quantity_s,
+                    price=from_coin_price_s,
                 )
                 self.logger.info(order)
             except BinanceAPIException as e:
@@ -301,9 +308,9 @@ class BinanceAPIManager:
         origin_balance = origin_balance or self.get_currency_balance(origin_symbol)
 
         origin_tick = self.get_alt_tick(origin_symbol, target_symbol)
-        return math.floor(origin_balance * 10 ** origin_tick) / float(10 ** origin_tick)
+        return math.floor(origin_balance * 10**origin_tick) / float(10**origin_tick)
 
-    def _sell_alt(self, origin_coin: Coin, target_coin: Coin):
+    def _sell_alt(self, origin_coin: Coin, target_coin: Coin):  # pylint: disable=too-many-locals
         """
         Sell altcoin
         """
@@ -316,9 +323,13 @@ class BinanceAPIManager:
 
         origin_balance = self.get_currency_balance(origin_symbol)
         target_balance = self.get_currency_balance(target_symbol)
+
+        pair_info = self.binance_client.get_symbol_info(origin_symbol + target_symbol)
         from_coin_price = self.get_ticker_price(origin_symbol + target_symbol)
+        from_coin_price_s = "{:0.0{}f}".format(from_coin_price, pair_info["quotePrecision"])
 
         order_quantity = self._sell_quantity(origin_symbol, target_symbol, origin_balance)
+        order_quantity_s = "{:0.0{}f}".format(order_quantity, pair_info["baseAssetPrecision"])
         self.logger.info(f"Selling {order_quantity} of {origin_symbol}")
 
         self.logger.info(f"Balance is {origin_balance}")
@@ -327,7 +338,9 @@ class BinanceAPIManager:
         while order is None:
             # Should sell at calculated price to avoid lost coin
             order = self.binance_client.order_limit_sell(
-                symbol=origin_symbol + target_symbol, quantity=order_quantity, price=from_coin_price
+                symbol=origin_symbol + target_symbol,
+                quantity=(order_quantity_s),
+                price=from_coin_price_s,
             )
 
         self.logger.info("order")

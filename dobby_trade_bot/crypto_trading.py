@@ -7,13 +7,12 @@ from .database import Database
 from .logger import Logger
 from .scheduler import SafeScheduler
 from .strategies import get_strategy
-from .crypto import co, gitr
+
 
 def main():
     logger = Logger()
-    logger.info(co())
-    logger.info(gitr())
     logger.info("Starting")
+    logger.info("Co-author: Pavel Dat")
 
     config = Config()
     db = Database(logger, config)

@@ -1,1 +1,1 @@
-worker: python3 -m binance_trade_bot
+worker: python3 -m dobby_trade_bot
