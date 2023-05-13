@@ -2,6 +2,7 @@ from collections import defaultdict
 from datetime import datetime, timedelta
 from traceback import format_exc
 from typing import Dict
+from pathlib import Path
 
 from sqlitedict import SqliteDict
 
@@ -13,6 +14,8 @@ from .logger import Logger
 from .models import Coin, Pair
 from .strategies import get_strategy
 
+
+Path('data').mkdir(exist_ok=True, parents=True)
 cache = SqliteDict("data/backtest_cache.db")
 
 
